@@ -1,0 +1,80 @@
+# ========================
+# Maven / Gradle
+# ========================
+target/
+build/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# ========================
+# IDEs
+# ========================
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Eclipse / STS
+*.classpath
+*.project
+*.settings/
+.apt_generated/
+.springBeans/
+.factorypath
+.sts4-cache/
+
+# VS Code
+.vscode/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# ========================
+# OS-specific
+# ========================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ========================
+# Logs & temporary files
+# ========================
+*.log
+logs/
+*.tmp
+*.swp
+spring.log
+hs_err_pid*
+
+# ========================
+# Environment / secrets
+# ========================
+.env
+*.env
+.settings/
+*.key
+*.pem
+
+# ========================
+# Test / coverage reports
+# ========================
+coverage/
+target/site/
+reports/

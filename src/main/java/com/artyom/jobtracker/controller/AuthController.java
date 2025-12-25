@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.artyom.jobtracker.dto.AuthResponseDto;
 import com.artyom.jobtracker.dto.LoginUserDto;
 import com.artyom.jobtracker.dto.RegisterUserDto;
 import com.artyom.jobtracker.dto.UserResponseDto;
@@ -28,9 +29,16 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@Valid @RequestBody LoginUserDto dto) {
+    public AuthResponseDto login(@Valid @RequestBody LoginUserDto dto) {
         return userService.login(dto); 
     }
+
+    @PostMapping("/refresh")
+    public String refreshAccessToken(@Valid @RequestBody String refreshToken ) {
+        return userService.refreshAccessToken(refreshToken); 
+    }
+
+
 
 }
 

@@ -3,6 +3,7 @@ package com.artyom.jobtracker.service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.artyom.jobtracker.dto.AuthResponseDto;
 import com.artyom.jobtracker.dto.LoginUserDto;
 import com.artyom.jobtracker.dto.RegisterUserDto;
 import com.artyom.jobtracker.dto.UserResponseDto;
@@ -34,7 +35,7 @@ public class UserService {
         return new UserResponseDto(savedUser.getId(), savedUser.getName(), savedUser.getEmail());
     }
 
-    public String login(LoginUserDto dto) {
+    public AuthResponseDto login(LoginUserDto dto) {
         User user = userRepository.findByEmail(dto.email())
             .orElseThrow(() -> new RuntimeException("Invalid credentials"));
 
@@ -42,7 +43,14 @@ public class UserService {
             throw new RuntimeException("Invalid credentials");
         }
 
-        return jwtUtil.generateAccessToken(user.getName(), user.getEmail(), user.getRole() );
+        String accessToken = jwtUtil.generateAccessToken(user.getName(), user.getEmail(), user.getRole());
+        String refreshToken = jwtUtil.generateRefreshToken(user.getName()); // or email if you prefer
+
+        user.setRefreshToken(refreshToken);
+        userRepository.save(user);
+
+        return new AuthResponseDto(accessToken, refreshToken);
+
     }
 
     public String refreshAccessToken(String refreshToken) {

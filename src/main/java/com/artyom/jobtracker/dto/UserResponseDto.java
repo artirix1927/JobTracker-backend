@@ -1,7 +1,8 @@
 package com.artyom.jobtracker.dto;
 
+
 public record UserResponseDto(
     Long id,
-    String username,
+    String name,
     String email
 ) {}

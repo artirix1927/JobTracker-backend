@@ -1,6 +1,6 @@
 package com.artyom.jobtracker.entity;
 
-public enum Status {
+public enum ApplicationStatus {
     APPLIED,
     INTERVIEW,
     OFFER,

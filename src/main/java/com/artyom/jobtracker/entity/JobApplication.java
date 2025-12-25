@@ -2,6 +2,7 @@ package com.artyom.jobtracker.entity;
 
 import java.time.LocalDateTime;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -25,7 +26,9 @@ public class JobApplication {
 
     @Enumerated(EnumType.STRING)
     @SuppressWarnings("FieldMayBeFinal")
-    private Status status = Status.APPLIED; // APPLIED, INTERVIEW, OFFER, REJECTED
+    private ApplicationStatus status = ApplicationStatus.APPLIED; // APPLIED, INTERVIEW, OFFER, REJECTED
 
+    @Column(nullable = false)
     private final LocalDateTime appliedAt = LocalDateTime.now();
+
 }

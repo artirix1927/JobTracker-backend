@@ -2,6 +2,8 @@ package com.artyom.jobtracker.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -15,8 +17,8 @@ public class User {
     @GeneratedValue
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String username;
+    @Column(nullable = false)
+    private String name;
 
     @Column(nullable = false)
     private String password;
@@ -24,8 +26,9 @@ public class User {
     @Column(unique = true)
     private String email;
 
+    @Enumerated(EnumType.STRING)
     @SuppressWarnings("FieldMayBeFinal")
-    private String role = "USER";
+    private UserStatus role = UserStatus.USER;
 
     @Column()
     private String refreshToken;
@@ -41,12 +44,12 @@ public class User {
         return id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
@@ -63,5 +66,9 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public UserStatus getRole(){
+        return role;
     }
 }

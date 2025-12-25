@@ -25,25 +25,24 @@ public class UserService {
 
     public UserResponseDto register(RegisterUserDto dto) {
         User user = new User();
-        user.setUsername(dto.username());
+        user.setName(dto.name());
         user.setEmail(dto.email());
         user.setPassword(passwordEncoder.encode(dto.password()));
     
         User savedUser = userRepository.save(user);
 
-        return new UserResponseDto(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail());
+        return new UserResponseDto(savedUser.getId(), savedUser.getName(), savedUser.getEmail());
     }
 
     public String login(LoginUserDto dto) {
-        User user = userRepository.findByUsername(dto.username())
+        User user = userRepository.findByEmail(dto.email())
             .orElseThrow(() -> new RuntimeException("Invalid credentials"));
 
         if (!passwordEncoder.matches(dto.password(), user.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
 
-        // Generate JWT token
-        return jwtUtil.generateAccessToken(user.getUsername());
+        return jwtUtil.generateAccessToken(user.getName(), user.getEmail(), user.getRole() );
     }
 
     public String refreshAccessToken(String refreshToken) {
@@ -51,6 +50,6 @@ public class UserService {
         User user = userRepository.findByRefreshToken(refreshToken)
             .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
 
-        return jwtUtil.generateAccessToken(user.getUsername());
+        return jwtUtil.generateAccessToken(user.getName(), user.getEmail(), user.getRole());
     }
 }

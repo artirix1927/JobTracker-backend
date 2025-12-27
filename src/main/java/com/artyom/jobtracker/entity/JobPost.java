@@ -1,11 +1,18 @@
 package com.artyom.jobtracker.entity;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
 
-@SuppressWarnings("unused")
+@Getter
+@Setter
 @Entity
 public class JobPost {
 
@@ -16,6 +23,12 @@ public class JobPost {
     private String title;
     private String company;
     private String description;
+    private BigDecimal salary;
+    private String location;
+
+
+    @Enumerated(EnumType.STRING)
+    private JobType jobType;
 
     @ManyToOne
     private User postedBy;

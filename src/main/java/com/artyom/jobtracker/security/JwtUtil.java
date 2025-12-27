@@ -20,10 +20,9 @@ public class JwtUtil {
     private final long accessExpiration = 1000 * 60 * 60; // 1 hour
     private final long refreshExpiration = 1000 * 60 * 60 * 24 * 7; // 7 days
 
-    public String generateAccessToken(String username, String email, UserStatus role) {
+    public String generateAccessToken(String email, UserStatus role) {
         return Jwts.builder()
-                .setSubject(username) // unique identity
-                .claim("email", email)
+                .setSubject(email) // unique identity
                 .claim("role", role.name())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + accessExpiration))
@@ -31,9 +30,10 @@ public class JwtUtil {
                 .compact();
     }
 
-    public String generateRefreshToken(String username) {
+    public String generateRefreshToken(String email, UserStatus role) {
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(email)
+                .claim("role", role.name())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + refreshExpiration))
                 .signWith(key)
@@ -41,12 +41,8 @@ public class JwtUtil {
     }
 
     
-    public String getUsername(String token) {
-        return getClaims(token).getSubject();
-    }
-
     public String getEmail(String token) {
-        return getClaims(token).get("email", String.class);
+        return getClaims(token).getSubject();   // ✅ FIXED
     }
 
     public String getRole(String token) {

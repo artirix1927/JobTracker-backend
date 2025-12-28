@@ -2,6 +2,7 @@ package com.artyom.jobtracker.entity;
 
 import java.math.BigDecimal;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -22,6 +23,8 @@ public class JobPost {
 
     private String title;
     private String company;
+    
+    @Column(columnDefinition = "TEXT")
     private String description;
     private BigDecimal salary;
     private String location;

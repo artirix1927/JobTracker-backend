@@ -1,24 +1,29 @@
 package com.artyom.jobtracker.security;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.artyom.jobtracker.entity.UserStatus;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 
 @Component
 public class JwtUtil {
-
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final Key key;
     private final long accessExpiration = 1000 * 60 * 60; // 1 hour
     private final long refreshExpiration = 1000 * 60 * 60 * 24 * 7; // 7 days
+
+
+    public JwtUtil(@Value("${jwt.secret}") String secret) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
 
     public String generateAccessToken(String email, UserStatus role) {
         return Jwts.builder()

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.artyom.jobtracker.dto.AuthResponseDto;
 import com.artyom.jobtracker.dto.LoginUserDto;
+import com.artyom.jobtracker.dto.RefreshTokenDto;
 import com.artyom.jobtracker.dto.RegisterUserDto;
 import com.artyom.jobtracker.dto.UserResponseDto;
 import com.artyom.jobtracker.service.UserService;
@@ -34,8 +35,8 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public String refreshAccessToken(@Valid @RequestBody String refreshToken ) {
-        return userService.refreshAccessToken(refreshToken); 
+    public String refreshAccessToken(@RequestBody RefreshTokenDto request) {
+        return userService.refreshAccessToken(request.refreshToken()); 
     }
 
 

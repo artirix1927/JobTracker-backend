@@ -30,6 +30,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/media/**").permitAll()
                 .requestMatchers("/api/job-posts/**").authenticated()
                 .anyRequest().authenticated()
             );

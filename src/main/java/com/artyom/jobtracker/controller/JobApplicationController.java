@@ -1,0 +1,45 @@
+package com.artyom.jobtracker.controller;
+
+import java.util.List;
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.artyom.jobtracker.dto.JobApplicationCreateRequest;
+import com.artyom.jobtracker.entity.JobApplication;
+import com.artyom.jobtracker.entity.User;
+import com.artyom.jobtracker.service.JobApplicationService;
+
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequestMapping("/api/job-application")
+@RequiredArgsConstructor
+public class JobApplicationController {
+
+    private final JobApplicationService jobApplicationService;
+
+    @PostMapping(
+        value = "/create",
+        consumes = "multipart/form-data"
+    )
+    public JobApplication apply(
+            @AuthenticationPrincipal User user,
+            @ModelAttribute JobApplicationCreateRequest request
+    ) {
+        return jobApplicationService.createApplication(request, user);
+    }
+
+    @GetMapping("/by-job-post")
+    public List<JobApplication> byJobPost(@RequestParam Long jobPostId){
+        return jobApplicationService.getApplicationsForJob(jobPostId);
+    }
+
+
+
+}

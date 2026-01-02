@@ -9,4 +9,8 @@ import com.artyom.jobtracker.entity.JobApplication;
 
 public interface JobApplicationRepository extends JpaRepository<JobApplication, Long> {
     List<JobApplication> findByUserId(Long userId);
+
+    List<JobApplication> findByJobPostId(Long jobPostId);
+
+    
 }

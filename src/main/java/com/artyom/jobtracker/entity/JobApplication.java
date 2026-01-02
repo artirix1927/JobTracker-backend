@@ -7,15 +7,20 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
 
 @SuppressWarnings("unused")
 @Entity
+@Getter
+@Setter
 public class JobApplication {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -25,10 +30,26 @@ public class JobApplication {
     private JobPost jobPost;
 
     @Enumerated(EnumType.STRING)
-    @SuppressWarnings("FieldMayBeFinal")
     private ApplicationStatus status = ApplicationStatus.APPLIED; // APPLIED, INTERVIEW, OFFER, REJECTED
 
     @Column(nullable = false)
     private final LocalDateTime appliedAt = LocalDateTime.now();
 
+    @Column(nullable = false)
+    private String fullName;
+
+    @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String phone;
+
+    @Column(nullable = true)
+    private String address;
+
+    @Column(nullable = true)
+    private String resumePath;
+
+    @Column(nullable = true)
+    private String resumeFilename;
 }

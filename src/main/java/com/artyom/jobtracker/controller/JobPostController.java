@@ -54,4 +54,10 @@ public class JobPostController {
     public List<JobPost> searchByTitle(@RequestParam String title) {
         return jobPostService.searchByTitle(title);
     }
+
+    @GetMapping("/by-user")
+    public List<JobPost> searchByUser(@RequestParam Long userId) {
+        return jobPostService.searchByCreator(userId);
+    }
+
 }

@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.artyom.jobtracker.entity.JobPost;
-import com.artyom.jobtracker.entity.User;
 import com.artyom.jobtracker.repository.JobPostRepository;
 
 @Service
@@ -30,7 +29,8 @@ public class JobPostService {
         return jobPostRepository.findByTitleContainingIgnoreCase(title);
     }
 
-    public List<JobPost> searchByCreator(User user) {
-        return jobPostRepository.findByPostedBy(user);
+    public List<JobPost> searchByCreator(Long userId) {
+        //how to get the user here
+        return jobPostRepository.findByPostedById(userId);
     }
 }

@@ -1,6 +1,7 @@
 package com.artyom.jobtracker.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,8 +52,11 @@ public class JobPostController {
     }
 
     @GetMapping("/search")
-    public List<JobPost> searchByTitle(@RequestParam String title) {
-        return jobPostService.searchByTitle(title);
+        public List<JobPost> search(
+            @RequestParam Optional<String> title,
+            @RequestParam Optional<String> address
+    ) {
+        return jobPostService.search(title, address);
     }
 
     @GetMapping("/by-user")

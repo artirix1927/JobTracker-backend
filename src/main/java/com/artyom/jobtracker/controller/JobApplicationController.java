@@ -6,11 +6,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.artyom.jobtracker.dto.JobApplicationCreateRequest;
+import com.artyom.jobtracker.dto.SetApplicationStatusDto;
 import com.artyom.jobtracker.entity.JobApplication;
 import com.artyom.jobtracker.entity.User;
 import com.artyom.jobtracker.service.JobApplicationService;
@@ -39,6 +41,13 @@ public class JobApplicationController {
     public List<JobApplication> byJobPost(@RequestParam Long jobPostId){
         return jobApplicationService.getApplicationsForJob(jobPostId);
     }
+
+
+    @PostMapping(value = "/set-status")
+    public JobApplication setStatus(@RequestBody SetApplicationStatusDto req){
+        return jobApplicationService.setJobApplicationStatus(req.jobApplicationId(), req.newStatus());
+    }
+
 
 
 

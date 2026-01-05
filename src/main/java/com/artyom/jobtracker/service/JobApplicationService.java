@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.artyom.jobtracker.dto.JobApplicationCreateRequest;
+import com.artyom.jobtracker.entity.ApplicationStatus;
 import com.artyom.jobtracker.entity.JobApplication;
 import com.artyom.jobtracker.entity.JobPost;
 import com.artyom.jobtracker.entity.User;
@@ -65,4 +66,19 @@ public class JobApplicationService {
     public List<JobApplication> getApplicationsForJob(Long jobPostId) {
         return jobApplicationRepository.findByJobPostId(jobPostId);
     }
+
+
+    public JobApplication setJobApplicationStatus(Long jobApplicationId, String newStatus) {
+
+        JobApplication application = jobApplicationRepository.findById(jobApplicationId)
+        .orElseThrow(() -> new RuntimeException("Job Application Not Found"));
+
+
+        application.setStatus(ApplicationStatus.valueOf(newStatus));
+
+
+        return jobApplicationRepository.save(application);
+
+    }
+
 }

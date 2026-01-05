@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,8 +33,8 @@ public class JobApplication {
     @Enumerated(EnumType.STRING)
     private ApplicationStatus status = ApplicationStatus.APPLIED; // APPLIED, INTERVIEW, OFFER, REJECTED
 
-    @Column(nullable = false)
-    private final LocalDateTime appliedAt = LocalDateTime.now();
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime appliedAt;
 
     @Column(nullable = false)
     private String fullName;
@@ -52,4 +53,10 @@ public class JobApplication {
 
     @Column(nullable = true)
     private String resumeFilename;
+
+
+    @PrePersist
+    void onCreate() {
+        this.appliedAt = LocalDateTime.now();
+    }
 }

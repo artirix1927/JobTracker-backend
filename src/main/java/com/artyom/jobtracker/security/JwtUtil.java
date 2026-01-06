@@ -7,7 +7,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.artyom.jobtracker.entity.UserStatus;
+import com.artyom.jobtracker.entity.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -25,20 +25,22 @@ public class JwtUtil {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateAccessToken(String email, UserStatus role) {
+    public String generateAccessToken(User user) {
         return Jwts.builder()
-                .setSubject(email) // unique identity
-                .claim("role", role.name())
+                .setSubject(user.getEmail()) // unique identity
+                .claim("role", user.getRole().name())
+                .claim("id", user.getId())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + accessExpiration))
                 .signWith(key)
                 .compact();
     }
 
-    public String generateRefreshToken(String email, UserStatus role) {
+    public String generateRefreshToken(User user) {
         return Jwts.builder()
-                .setSubject(email)
-                .claim("role", role.name())
+                .setSubject(user.getEmail())
+                .claim("role", user.getRole().name())
+                .claim("id", user.getId())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + refreshExpiration))
                 .signWith(key)

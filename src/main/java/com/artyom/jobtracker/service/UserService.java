@@ -43,8 +43,8 @@ public class UserService {
             throw new RuntimeException("Invalid credentials");
         }
 
-        String accessToken = jwtUtil.generateAccessToken(user.getEmail(), user.getRole());
-        String refreshToken = jwtUtil.generateRefreshToken(user.getEmail(), user.getRole());
+        String accessToken = jwtUtil.generateAccessToken(user);
+        String refreshToken = jwtUtil.generateRefreshToken(user);
         user.setRefreshToken(refreshToken);
         userRepository.save(user);
 
@@ -57,6 +57,6 @@ public class UserService {
         User user = userRepository.findByRefreshToken(refreshToken)
             .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
 
-        return jwtUtil.generateAccessToken(user.getEmail(), user.getRole());
+        return jwtUtil.generateAccessToken(user);
     }
 }

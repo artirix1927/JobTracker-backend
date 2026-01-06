@@ -1,7 +1,6 @@
 package com.artyom.jobtracker.controller;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -38,10 +37,13 @@ public class JobApplicationController {
     }
 
     @GetMapping("/by-job-post")
-    public List<JobApplication> byJobPost(@RequestParam Long jobPostId){
-        return jobApplicationService.getApplicationsForJob(jobPostId);
+    public Page<JobApplication> byJobPost(
+            @RequestParam Long jobPostId,
+            @RequestParam int page,
+            @RequestParam int size
+    ) {
+        return jobApplicationService.getApplicationsForJob(jobPostId, page, size);
     }
-
 
     @PostMapping(value = "/set-status")
     public JobApplication setStatus(@RequestBody SetApplicationStatusDto req){

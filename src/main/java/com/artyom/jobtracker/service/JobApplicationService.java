@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.artyom.jobtracker.dto.JobApplicationCreateRequest;
@@ -63,8 +65,11 @@ public class JobApplicationService {
     }
 
 
-    public List<JobApplication> getApplicationsForJob(Long jobPostId) {
-        return jobApplicationRepository.findByJobPostId(jobPostId);
+    public Page<JobApplication> getApplicationsForJob(Long jobPostId, int page, int size) {
+        return jobApplicationRepository.findByJobPostId(
+            jobPostId,
+            PageRequest.of(page, size, Sort.by("id").descending())
+        );
     }
 
 

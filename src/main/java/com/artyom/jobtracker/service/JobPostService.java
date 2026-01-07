@@ -3,6 +3,8 @@ package com.artyom.jobtracker.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -24,27 +26,24 @@ public class JobPostService {
         return jobPostRepository.save(post);
     }
 
-    public List<JobPost> getAllJobPosts() {
-        return jobPostRepository.findAll();
+    public Page<JobPost> getAllJobPosts(Pageable pageable) {
+        return jobPostRepository.findAll(pageable);
     }
 
-    public List<JobPost> search(Optional<String> title, Optional<String> address) {
-
+    public Page<JobPost> search(Optional<String> title, Optional<String> address, Pageable pageable) {
         Specification<JobPost> spec = (root, query, cb) -> cb.conjunction();
         
         if (title.isPresent() && !title.get().isBlank()) {
             spec = spec.and(JobPostSpecification.hasTitle(title.get()));
         }
-
         if (address.isPresent() && !address.get().isBlank()) {
             spec = spec.and(JobPostSpecification.hasAddress(address.get()));
         }
 
-        return jobPostRepository.findAll(spec);
+        return jobPostRepository.findAll(spec, pageable);
     }
 
     public List<JobPost> searchByCreator(Long userId) {
-        //how to get the user here
         return jobPostRepository.findByPostedById(userId);
     }
 }

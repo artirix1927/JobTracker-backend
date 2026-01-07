@@ -3,6 +3,8 @@ package com.artyom.jobtracker.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +17,7 @@ import com.artyom.jobtracker.dto.CreateJobPostRequest;
 import com.artyom.jobtracker.entity.JobPost;
 import com.artyom.jobtracker.entity.User;
 import com.artyom.jobtracker.service.JobPostService;
+
 
 @RestController
 @RequestMapping("/api/job-posts")
@@ -46,22 +49,28 @@ public class JobPostController {
         return jobPostService.createJobPost(post);
     }
 
-    @GetMapping("/get-all")
-    public List<JobPost> getAllJobPosts() {
-        return jobPostService.getAllJobPosts();
-    }
-
-    @GetMapping("/search")
-        public List<JobPost> search(
-            @RequestParam Optional<String> title,
-            @RequestParam Optional<String> address
-    ) {
-        return jobPostService.search(title, address);
-    }
-
+   
     @GetMapping("/by-user")
     public List<JobPost> searchByUser(@RequestParam Long userId) {
         return jobPostService.searchByCreator(userId);
+    }
+
+    @GetMapping("/all")
+    public Page<JobPost> getAllJobs(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return jobPostService.getAllJobPosts(PageRequest.of(page, size));
+    }
+
+    @GetMapping("/search")
+    public Page<JobPost> searchJobs(
+            @RequestParam Optional<String> title,
+            @RequestParam Optional<String> address,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return jobPostService.search(title, address, PageRequest.of(page, size));
     }
 
 }

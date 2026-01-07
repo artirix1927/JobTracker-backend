@@ -54,8 +54,19 @@ public class UserService {
 
     public String refreshAccessToken(String refreshToken) {
 
-        User user = userRepository.findByRefreshToken(refreshToken)
-            .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
+        if (!jwtUtil.validateRefreshToken(refreshToken)) {
+            throw new RuntimeException("Invalid refresh token");
+        }
+
+        String email = jwtUtil.getEmail(refreshToken);
+
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // optional extra safety
+        if (!refreshToken.equals(user.getRefreshToken())) {
+            throw new RuntimeException("Refresh token mismatch");
+        }
 
         return jwtUtil.generateAccessToken(user);
     }

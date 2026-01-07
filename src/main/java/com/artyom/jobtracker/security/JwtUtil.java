@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.artyom.jobtracker.entity.User;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
@@ -17,7 +18,7 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtUtil {
     private final Key key;
-    private final long accessExpiration = 1000 * 60 * 60; // 1 hour
+    private final long accessExpiration = 1000 * 60 * 60; // 1 hour 
     private final long refreshExpiration = 1000 * 60 * 60 * 24 * 7; // 7 days
 
 
@@ -30,6 +31,7 @@ public class JwtUtil {
                 .setSubject(user.getEmail()) // unique identity
                 .claim("role", user.getRole().name())
                 .claim("id", user.getId())
+                .claim("type", "ACCESS")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + accessExpiration))
                 .signWith(key)
@@ -41,6 +43,7 @@ public class JwtUtil {
                 .setSubject(user.getEmail())
                 .claim("role", user.getRole().name())
                 .claim("id", user.getId())
+                .claim("type", "REFRESH")
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + refreshExpiration))
                 .signWith(key)
@@ -62,5 +65,19 @@ public class JwtUtil {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    public boolean validateRefreshToken(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+            return "REFRESH".equals(claims.get("type", String.class));
+        } catch (JwtException e) {
+            return false;
+        }
     }
 }

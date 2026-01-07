@@ -78,3 +78,7 @@ hs_err_pid*
 coverage/
 target/site/
 reports/
+
+
+
+uploads/

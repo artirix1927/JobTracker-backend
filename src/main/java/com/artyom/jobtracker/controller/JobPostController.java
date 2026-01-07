@@ -1,10 +1,10 @@
 package com.artyom.jobtracker.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,9 +50,14 @@ public class JobPostController {
     }
 
    
-    @GetMapping("/by-user")
-    public List<JobPost> searchByUser(@RequestParam Long userId) {
-        return jobPostService.searchByCreator(userId);
+    @GetMapping("/by-user-paged")
+    public Page<JobPost> getJobsByUserPaged(
+            @RequestParam Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return jobPostService.getJobsByUser(userId, pageable);
     }
 
     @GetMapping("/all")

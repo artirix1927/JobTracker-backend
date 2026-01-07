@@ -1,6 +1,5 @@
 package com.artyom.jobtracker.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -43,7 +42,7 @@ public class JobPostService {
         return jobPostRepository.findAll(spec, pageable);
     }
 
-    public List<JobPost> searchByCreator(Long userId) {
-        return jobPostRepository.findByPostedById(userId);
+    public Page<JobPost> getJobsByUser(Long userId, Pageable pageable) {
+        return jobPostRepository.findByPostedById(userId, pageable);
     }
 }

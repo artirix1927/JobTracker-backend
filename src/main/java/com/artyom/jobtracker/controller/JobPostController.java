@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,8 @@ import com.artyom.jobtracker.entity.JobPost;
 import com.artyom.jobtracker.entity.User;
 import com.artyom.jobtracker.service.JobPostService;
 
+import jakarta.validation.Valid;
+
 
 @RestController
 @RequestMapping("/api/job-posts")
@@ -30,7 +33,7 @@ public class JobPostController {
     }
 
     @PostMapping("/create")
-    public JobPost createJobPost(@RequestBody CreateJobPostRequest req) {
+    public JobPost createJobPost(@Valid @RequestBody CreateJobPostRequest req) {
 
         User currentUser = (User) SecurityContextHolder
                 .getContext()
@@ -52,12 +55,12 @@ public class JobPostController {
    
     @GetMapping("/by-user-paged")
     public Page<JobPost> getJobsByUserPaged(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal User user,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        return jobPostService.getJobsByUser(userId, pageable);
+        return jobPostService.getJobsByUser(user.getId(), pageable);
     }
 
     @GetMapping("/all")

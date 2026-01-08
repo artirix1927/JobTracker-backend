@@ -16,6 +16,10 @@ import com.artyom.jobtracker.entity.JobApplication;
 import com.artyom.jobtracker.entity.User;
 import com.artyom.jobtracker.service.JobApplicationService;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -31,22 +35,22 @@ public class JobApplicationController {
     )
     public JobApplication apply(
             @AuthenticationPrincipal User user,
-            @ModelAttribute JobApplicationCreateRequest request
+            @Valid @ModelAttribute JobApplicationCreateRequest request
     ) {
         return jobApplicationService.createApplication(request, user);
     }
 
     @GetMapping("/by-job-post")
     public Page<JobApplication> byJobPost(
-            @RequestParam Long jobPostId,
-            @RequestParam int page,
-            @RequestParam int size
+        @RequestParam @NotNull @Positive Long jobPostId,
+        @RequestParam(defaultValue = "0") @PositiveOrZero int page,
+        @RequestParam(defaultValue = "10") @Positive int size
     ) {
         return jobApplicationService.getApplicationsForJob(jobPostId, page, size);
     }
 
     @PostMapping(value = "/set-status")
-    public JobApplication setStatus(@RequestBody SetApplicationStatusDto req){
+    public JobApplication setStatus(@Valid @RequestBody SetApplicationStatusDto req){
         return jobApplicationService.setJobApplicationStatus(req.jobApplicationId(), req.newStatus());
     }
 

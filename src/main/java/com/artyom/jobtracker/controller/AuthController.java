@@ -1,6 +1,5 @@
 package com.artyom.jobtracker.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,15 +37,11 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public ResponseEntity<String> refreshAccessToken(
-            @RequestBody RefreshTokenDto request
+            @Valid @RequestBody RefreshTokenDto request
     ) {
-        try {
-            return ResponseEntity.ok(
-                userService.refreshAccessToken(request.refreshToken())
-            );
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        return ResponseEntity.ok(
+            userService.refreshAccessToken(request.refreshToken())
+        );
     }
 
 

@@ -4,11 +4,15 @@ import java.math.BigDecimal;
 
 import com.artyom.jobtracker.entity.JobType;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 public record CreateJobPostRequest(
-    String title,
-    String company,
-    String description,
-    BigDecimal salary,
-    String location,
-    JobType jobType
+    @NotBlank String title,
+    @NotBlank String company,
+    @NotBlank String description,
+    @NotNull @Positive BigDecimal salary,
+    @NotBlank String location,
+    @NotNull JobType jobType
 ) {}

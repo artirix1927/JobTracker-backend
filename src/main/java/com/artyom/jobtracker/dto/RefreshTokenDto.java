@@ -1,3 +1,7 @@
 package com.artyom.jobtracker.dto;
 
-public record RefreshTokenDto(String refreshToken) {}
+import jakarta.validation.constraints.NotBlank;
+
+public record RefreshTokenDto(
+    @NotBlank String refreshToken
+) {}

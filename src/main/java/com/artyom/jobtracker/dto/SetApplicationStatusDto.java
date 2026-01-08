@@ -1,8 +1,10 @@
 package com.artyom.jobtracker.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public record SetApplicationStatusDto (
-    @NotBlank Long jobApplicationId,
+    @NotNull @Positive Long jobApplicationId,
     @NotBlank String newStatus
 ) {}

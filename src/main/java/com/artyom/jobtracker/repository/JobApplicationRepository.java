@@ -14,5 +14,7 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
 
     Page<JobApplication> findByJobPostId(Long jobPostId, Pageable pageable);
 
+    boolean existsByUserIdAndJobPostId(Long userId, Long jobPostId);
+
     
 }

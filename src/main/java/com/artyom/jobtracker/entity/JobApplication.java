@@ -11,11 +11,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 
 @SuppressWarnings("unused")
 @Entity
+@Table(
+    name = "job_application",
+    uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "job_post_id"})
+)
 @Getter
 @Setter
 public class JobApplication {

@@ -1,0 +1,14 @@
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="7" author="artyom">
+        <addUniqueConstraint
+            tableName="job_application"
+            columnNames="user_id, job_post_id"
+            constraintName="uc_user_job_post_unique"/>
+    </changeSet>
+
+</databaseChangeLog>

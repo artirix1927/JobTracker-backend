@@ -31,6 +31,14 @@ public class JobApplicationService {
             JobApplicationCreateRequest request,
             User user
     ) {
+        Long jobPostId = request.jobPostId();
+        
+        boolean alreadyApplied = jobApplicationRepository.existsByUserIdAndJobPostId(user.getId(), jobPostId);
+        if (alreadyApplied) {
+            throw new IllegalArgumentException("You have already applied to this job.");
+        }
+
+
         JobPost jobPost = jobPostRepository.findById(request.jobPostId())
                 .orElseThrow(() -> new IllegalArgumentException("Job post not found"));
 

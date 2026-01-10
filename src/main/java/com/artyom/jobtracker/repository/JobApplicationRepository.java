@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.artyom.jobtracker.entity.ApplicationStatus;
 import com.artyom.jobtracker.entity.JobApplication;
 
 public interface JobApplicationRepository extends JpaRepository<JobApplication, Long> {
@@ -15,6 +16,8 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
     Page<JobApplication> findByJobPostId(Long jobPostId, Pageable pageable);
 
     boolean existsByUserIdAndJobPostId(Long userId, Long jobPostId);
+
+    Page<JobApplication> findByJobPostIdAndStatusIn(Long jobPostId, List<ApplicationStatus> statuses, Pageable pageable);
 
     
 }

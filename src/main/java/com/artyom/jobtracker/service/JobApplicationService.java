@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -73,11 +74,27 @@ public class JobApplicationService {
     }
 
 
-    public Page<JobApplication> getApplicationsForJob(Long jobPostId, int page, int size) {
-        return jobApplicationRepository.findByJobPostId(
-            jobPostId,
-            PageRequest.of(page, size, Sort.by("id").descending())
-        );
+    public Page<JobApplication> getApplicationsForJob(
+            Long jobPostId,
+            int page,
+            int size,
+            String sortBy,
+            String direction,
+            List<ApplicationStatus> statuses
+    ) {
+        Sort sort = direction.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+
+        if (statuses == null || statuses.isEmpty()) {
+            // No filtering by status
+            return jobApplicationRepository.findByJobPostId(jobPostId, pageRequest);
+        } else {
+            // Filter by given statuses
+            return jobApplicationRepository.findByJobPostIdAndStatusIn(jobPostId, statuses, pageRequest);
+        }
     }
 
 

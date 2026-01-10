@@ -1,5 +1,7 @@
 package com.artyom.jobtracker.controller;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.artyom.jobtracker.dto.JobApplicationCreateRequest;
 import com.artyom.jobtracker.dto.SetApplicationStatusDto;
+import com.artyom.jobtracker.entity.ApplicationStatus;
 import com.artyom.jobtracker.entity.JobApplication;
 import com.artyom.jobtracker.entity.User;
 import com.artyom.jobtracker.service.JobApplicationService;
@@ -44,10 +47,24 @@ public class JobApplicationController {
     public Page<JobApplication> byJobPost(
         @RequestParam @NotNull @Positive Long jobPostId,
         @RequestParam(defaultValue = "0") @PositiveOrZero int page,
-        @RequestParam(defaultValue = "10") @Positive int size
+        @RequestParam(defaultValue = "10") @Positive int size,
+        @RequestParam(defaultValue = "appliedAt") String sortBy,
+        @RequestParam(defaultValue = "desc") String direction,
+        @RequestParam(required = false) List<String> status
     ) {
-        return jobApplicationService.getApplicationsForJob(jobPostId, page, size);
+        List<ApplicationStatus> statuses = null;
+
+        if (status != null && !status.isEmpty()) {
+            statuses = status.stream()
+                .map(ApplicationStatus::valueOf)
+                .toList();
+        }
+
+        return jobApplicationService.getApplicationsForJob(
+            jobPostId, page, size, sortBy, direction, statuses
+        );
     }
+
 
     @PostMapping(value = "/set-status")
     public JobApplication setStatus(@Valid @RequestBody SetApplicationStatusDto req){

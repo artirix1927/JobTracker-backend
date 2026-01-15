@@ -31,6 +31,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/media/**").permitAll()
+                .requestMatchers("/api/job-posts/all").permitAll()
+                .requestMatchers("/api/job-posts/search").permitAll()
                 .requestMatchers("/api/job-posts/**").authenticated()
                 .anyRequest().authenticated()
             );

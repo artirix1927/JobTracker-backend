@@ -103,10 +103,22 @@ public class JobApplicationService {
         JobApplication application = jobApplicationRepository.findById(jobApplicationId)
         .orElseThrow(() -> new RuntimeException("Job Application Not Found"));
 
+        ApplicationStatus currentStatus = application.getStatus();
+        ApplicationStatus targetStatus;
 
-        application.setStatus(ApplicationStatus.valueOf(newStatus));
+        try {
+            targetStatus = ApplicationStatus.valueOf(newStatus);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid application status");
+        }
 
+        if (!currentStatus.canTransitionTo(targetStatus)) {
+            throw new IllegalStateException(
+                "Cannot change status from " + currentStatus + " to " + targetStatus
+            );
+        }
 
+        application.setStatus(targetStatus);
         return jobApplicationRepository.save(application);
 
     }

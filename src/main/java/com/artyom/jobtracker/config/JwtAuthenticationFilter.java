@@ -10,9 +10,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.artyom.jobtracker.entity.User;
-import com.artyom.jobtracker.repository.UserRepository;
 import com.artyom.jobtracker.security.JwtUtil;
+import com.artyom.jobtracker.user.User;
+import com.artyom.jobtracker.user.UserRepository;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,6 +1,8 @@
-package com.artyom.jobtracker.entity;
+package com.artyom.jobtracker.job_post;
 
 import java.math.BigDecimal;
+
+import com.artyom.jobtracker.user.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

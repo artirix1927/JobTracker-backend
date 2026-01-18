@@ -1,4 +1,4 @@
-package com.artyom.jobtracker.dto;
+package com.artyom.jobtracker.job_application;
 
 import org.springframework.web.multipart.MultipartFile;
 

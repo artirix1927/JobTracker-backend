@@ -1,4 +1,4 @@
-package com.artyom.jobtracker.entity;
+package com.artyom.jobtracker.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

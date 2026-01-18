@@ -1,4 +1,4 @@
-package com.artyom.jobtracker.entity;
+package com.artyom.jobtracker.job_application;
 
 public enum ApplicationStatus {
     APPLIED,

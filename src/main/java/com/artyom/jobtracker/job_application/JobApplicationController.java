@@ -1,4 +1,4 @@
-package com.artyom.jobtracker.controller;
+package com.artyom.jobtracker.job_application;
 
 import java.util.List;
 
@@ -12,12 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.artyom.jobtracker.dto.JobApplicationCreateRequest;
-import com.artyom.jobtracker.dto.SetApplicationStatusDto;
-import com.artyom.jobtracker.entity.ApplicationStatus;
-import com.artyom.jobtracker.entity.JobApplication;
-import com.artyom.jobtracker.entity.User;
-import com.artyom.jobtracker.service.JobApplicationService;
+import com.artyom.jobtracker.user.User;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

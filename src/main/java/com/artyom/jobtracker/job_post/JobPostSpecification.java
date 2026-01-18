@@ -1,8 +1,6 @@
-package com.artyom.jobtracker.repository;
+package com.artyom.jobtracker.job_post;
 
 import org.springframework.data.jpa.domain.Specification;
-
-import com.artyom.jobtracker.entity.JobPost;
 
 public class JobPostSpecification {
 

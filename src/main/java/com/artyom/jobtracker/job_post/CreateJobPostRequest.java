@@ -1,8 +1,6 @@
-package com.artyom.jobtracker.dto;
+package com.artyom.jobtracker.job_post;
 
 import java.math.BigDecimal;
-
-import com.artyom.jobtracker.entity.JobType;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

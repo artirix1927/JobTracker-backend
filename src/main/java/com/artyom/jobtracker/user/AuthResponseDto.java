@@ -1,3 +1,3 @@
-package com.artyom.jobtracker.dto;
+package com.artyom.jobtracker.user;
 
 public record AuthResponseDto(String accessToken, String refreshToken) {}

@@ -7,7 +7,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.artyom.jobtracker.entity.User;
+import com.artyom.jobtracker.user.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

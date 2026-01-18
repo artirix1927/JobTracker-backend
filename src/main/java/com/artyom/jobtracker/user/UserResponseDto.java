@@ -1,4 +1,4 @@
-package com.artyom.jobtracker.dto;
+package com.artyom.jobtracker.user;
 
 
 public record UserResponseDto(

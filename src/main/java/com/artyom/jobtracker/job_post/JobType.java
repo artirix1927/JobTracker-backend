@@ -1,4 +1,4 @@
-package com.artyom.jobtracker.entity;
+package com.artyom.jobtracker.job_post;
 
 public enum JobType {
     FULL_TIME,

@@ -1,4 +1,4 @@
-package com.artyom.jobtracker.service;
+package com.artyom.jobtracker.job_post;
 
 import java.util.Optional;
 
@@ -6,10 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import com.artyom.jobtracker.entity.JobPost;
-import com.artyom.jobtracker.repository.JobPostRepository;
-import com.artyom.jobtracker.repository.JobPostSpecification;
 
 @Service
 public class JobPostService {

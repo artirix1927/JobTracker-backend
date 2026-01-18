@@ -1,17 +1,10 @@
-package com.artyom.jobtracker.controller;
+package com.artyom.jobtracker.user;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.artyom.jobtracker.dto.AuthResponseDto;
-import com.artyom.jobtracker.dto.LoginUserDto;
-import com.artyom.jobtracker.dto.RefreshTokenDto;
-import com.artyom.jobtracker.dto.RegisterUserDto;
-import com.artyom.jobtracker.dto.UserResponseDto;
-import com.artyom.jobtracker.service.UserService;
 
 import jakarta.validation.Valid;
 

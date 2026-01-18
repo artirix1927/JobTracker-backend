@@ -1,4 +1,4 @@
-package com.artyom.jobtracker.service;
+package com.artyom.jobtracker.job_application;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,13 +12,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.artyom.jobtracker.dto.JobApplicationCreateRequest;
-import com.artyom.jobtracker.entity.ApplicationStatus;
-import com.artyom.jobtracker.entity.JobApplication;
-import com.artyom.jobtracker.entity.JobPost;
-import com.artyom.jobtracker.entity.User;
-import com.artyom.jobtracker.repository.JobApplicationRepository;
-import com.artyom.jobtracker.repository.JobPostRepository;
+import com.artyom.jobtracker.job_post.JobPost;
+import com.artyom.jobtracker.job_post.JobPostRepository;
+import com.artyom.jobtracker.user.User;
 
 import lombok.RequiredArgsConstructor;
 @Service

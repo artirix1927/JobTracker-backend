@@ -1,14 +1,8 @@
-package com.artyom.jobtracker.service;
+package com.artyom.jobtracker.user;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.artyom.jobtracker.dto.AuthResponseDto;
-import com.artyom.jobtracker.dto.LoginUserDto;
-import com.artyom.jobtracker.dto.RegisterUserDto;
-import com.artyom.jobtracker.dto.UserResponseDto;
-import com.artyom.jobtracker.entity.User;
-import com.artyom.jobtracker.repository.UserRepository;
 import com.artyom.jobtracker.security.JwtUtil;
 
 @Service

@@ -43,4 +43,23 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
         return ResponseEntity.badRequest().body("You have already applied to this job.");
     }
+
+
+    @ExceptionHandler(TwoFaRequiredException.class)
+    public ResponseEntity<Map<String, Object>> handle2FA(TwoFaRequiredException ex) {
+        return ResponseEntity.ok(Map.of(
+            "require2FA", true,
+            "email", ex.getEmail()
+        ));
+    }
+
+    
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Map<String, Object>> handleRuntime(RuntimeException ex) {
+        return ResponseEntity.badRequest().body(Map.of(
+            "error", ex.getMessage()
+        ));
+    }
+
+
 }

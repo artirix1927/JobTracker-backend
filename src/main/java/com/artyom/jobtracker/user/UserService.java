@@ -151,4 +151,9 @@ public class UserService {
 
         return true;
     }
+
+    public void logout(User user) {
+        user.setRefreshToken(null);
+        userRepository.save(user);
+    }
 }

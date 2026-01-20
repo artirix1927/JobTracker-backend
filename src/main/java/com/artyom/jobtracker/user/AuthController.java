@@ -62,6 +62,12 @@ public class AuthController {
         return ResponseEntity.ok(isCodeValid);
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@AuthenticationPrincipal User user) {
+        userService.logout(user);
+        return ResponseEntity.ok().build();
+    }
+
 
 
 }

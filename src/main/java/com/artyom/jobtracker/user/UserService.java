@@ -1,9 +1,13 @@
 package com.artyom.jobtracker.user;
 
+import java.util.Map;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.artyom.jobtracker.controller.TwoFaRequiredException;
 import com.artyom.jobtracker.security.JwtUtil;
+import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 @Service
 public class UserService {
@@ -11,11 +15,17 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final TwoFactorAuthService twoFactorAuthService;
+    private final User2FaRepository user2FaRepository;
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, 
+                       JwtUtil jwtUtil, TwoFactorAuthService twoFactorAuthService, 
+                       User2FaRepository user2FaRepository) {
+        this.twoFactorAuthService = twoFactorAuthService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
+        this.user2FaRepository = user2FaRepository;
     }
 
     public UserResponseDto register(RegisterUserDto dto) {
@@ -37,6 +47,14 @@ public class UserService {
             throw new RuntimeException("Invalid credentials");
         }
 
+        boolean is2FAEnabled = twoFactorAuthService.is2FAEnabled(user);
+
+        if (is2FAEnabled) {
+            // 2FA is enabled → do NOT generate tokens yet
+            // just let frontend know it needs the code
+            throw new TwoFaRequiredException(user.getEmail());
+        }
+
         String accessToken = jwtUtil.generateAccessToken(user);
         String refreshToken = jwtUtil.generateRefreshToken(user);
         user.setRefreshToken(refreshToken);
@@ -44,6 +62,24 @@ public class UserService {
 
         return new AuthResponseDto(accessToken, refreshToken);
 
+    }
+
+
+    public AuthResponseDto verify2Fa(String userEmail, int code){
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!twoFactorAuthService.verifyCode(user, code)) {
+            throw new RuntimeException("Invalid 2FA code");
+        }
+
+        String accessToken = jwtUtil.generateAccessToken(user);
+        String refreshToken = jwtUtil.generateRefreshToken(user);
+        user.setRefreshToken(refreshToken);
+
+        userRepository.save(user);
+
+        return new AuthResponseDto(accessToken, refreshToken);
     }
 
     public String refreshAccessToken(String refreshToken) {
@@ -63,5 +99,35 @@ public class UserService {
         }
 
         return jwtUtil.generateAccessToken(user);
+    }
+
+
+    public Map<String,String> enable2Fa(User user){
+        String secret = twoFactorAuthService.generateSecret();
+        User2Fa twoFA = new User2Fa();
+        twoFA.setUser(user);
+        twoFA.setSecret(secret);
+        twoFA.setEnabled(false); // not enabled until verified
+        user2FaRepository.save(twoFA);
+
+        // return QR code URL to frontend
+        String qrUrl = twoFactorAuthService.getQrCodeUrl(user.getEmail(), secret, "CareerHub");
+        return Map.of("qrUrl", qrUrl);
+    }
+
+    public boolean verify2FaSetup(User user, int code){
+        User2Fa user2FA = user2FaRepository.findById(user.getId())
+        .orElseThrow(() -> new RuntimeException("2FA not set up"));
+
+        GoogleAuthenticator gAuth = new GoogleAuthenticator();
+        boolean isCodeValid = gAuth.authorize(user2FA.getSecret(), code);
+
+        if (isCodeValid) {
+            user2FA.setEnabled(true); 
+            user2FaRepository.save(user2FA);
+        }
+
+        return isCodeValid;
+
     }
 }

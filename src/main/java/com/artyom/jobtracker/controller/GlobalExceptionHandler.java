@@ -53,12 +53,25 @@ public class GlobalExceptionHandler {
         ));
     }
 
-    
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Map<String, Object>> handleRuntime(RuntimeException ex) {
-        return ResponseEntity.badRequest().body(Map.of(
-            "error", ex.getMessage()
-        ));
+    @ExceptionHandler(InvalidTwoFaCodeException.class)
+    public ResponseEntity<Map<String, String>> handleInvalid2FA() {
+        return ResponseEntity.badRequest().body(
+            Map.of("error", "Invalid authentication code")
+        );
+    }
+
+    @ExceptionHandler(TwoFaNotInitializedException.class)
+    public ResponseEntity<Map<String, String>> handleNotInitialized() {
+        return ResponseEntity.badRequest().body(
+            Map.of("error", "2FA setup not initialized")
+        );
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Map<String, String>> handleIllegalState(IllegalStateException ex) {
+        return ResponseEntity.badRequest().body(
+            Map.of("error", ex.getMessage())
+        );
     }
 
 

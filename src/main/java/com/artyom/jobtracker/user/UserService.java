@@ -5,6 +5,8 @@ import java.util.Map;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.artyom.jobtracker.controller.InvalidTwoFaCodeException;
+import com.artyom.jobtracker.controller.TwoFaNotInitializedException;
 import com.artyom.jobtracker.controller.TwoFaRequiredException;
 import com.artyom.jobtracker.security.JwtUtil;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
@@ -103,31 +105,50 @@ public class UserService {
 
 
     public Map<String,String> enable2Fa(User user){
-        String secret = twoFactorAuthService.generateSecret();
-        User2Fa twoFA = new User2Fa();
-        twoFA.setUser(user);
-        twoFA.setSecret(secret);
-        twoFA.setEnabled(false); // not enabled until verified
-        user2FaRepository.save(twoFA);
 
-        // return QR code URL to frontend
-        String qrUrl = twoFactorAuthService.getQrCodeUrl(user.getEmail(), secret, "CareerHub");
+        User2Fa user2FA = user2FaRepository.findById(user.getId())
+            .orElseGet(() -> {
+                User2Fa u = new User2Fa();
+                u.setUser(user);
+                return u;
+            });
+
+        if (user2FA.isEnabled()) {
+            throw new IllegalStateException("2FA is already enabled");
+        }
+
+        if (user2FA.getSecret() == null) {
+            String secret = twoFactorAuthService.generateSecret();
+            user2FA.setSecret(secret);
+        }
+
+        user2FA.setEnabled(false);
+        user2FaRepository.save(user2FA);
+
+        String qrUrl = twoFactorAuthService.getQrCodeUrl(
+            user.getEmail(),
+            user2FA.getSecret(),
+            "CareerHub"
+        );
+
         return Map.of("qrUrl", qrUrl);
     }
 
     public boolean verify2FaSetup(User user, int code){
         User2Fa user2FA = user2FaRepository.findById(user.getId())
-        .orElseThrow(() -> new RuntimeException("2FA not set up"));
+            .orElseThrow(TwoFaNotInitializedException::new);
 
         GoogleAuthenticator gAuth = new GoogleAuthenticator();
         boolean isCodeValid = gAuth.authorize(user2FA.getSecret(), code);
 
-        if (isCodeValid) {
-            user2FA.setEnabled(true); 
-            user2FaRepository.save(user2FA);
+
+        if (!isCodeValid) {
+            throw new InvalidTwoFaCodeException();
         }
 
-        return isCodeValid;
+        user2FA.setEnabled(true);
+        user2FaRepository.save(user2FA);
 
+        return true;
     }
 }
